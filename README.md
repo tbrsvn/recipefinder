@@ -1,7 +1,8 @@
 # Recipe Finder
-A simple python program that finds recipes with the ingredients you provide
+A simple Python program that finds recipes with the ingredients you provide
 This is a project I built for a 2023 County Fair, but it requires you to create your own json called recipes.json.
 The format for each recipe should go somethihng like this:
+```
 {
     "Recipe Name": {
         "json": {
@@ -18,3 +19,4 @@ The format for each recipe should go somethihng like this:
             "url": "TheWebsite.com/bestrecipe"
         }
     },
+```
