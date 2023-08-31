@@ -20,4 +20,7 @@ The format for each recipe should go something like this:
             "url": "TheWebsite.com/bestrecipe"
         }
     },
+    "Another Recipe": {
+    ....json cont
+}
 ```
