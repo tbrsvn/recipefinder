@@ -14,6 +14,7 @@ The format for each recipe should go something like this:
             "ingredients": [
                 "Yummy",
                 "Things"
+            ],
             "language": "en-US",
             "source": "TheWebsite.com",
             "title": "Recipe Name",
