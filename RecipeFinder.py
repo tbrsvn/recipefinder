@@ -1,10 +1,16 @@
 from nltk.tokenize import RegexpTokenizer
 import tkinter as tk
-from tkinter import simpledialog
+from tkinter import simpledialog, messagebox
 from gooey import Gooey, GooeyParser
 import ujson as json
+import os
 import pkg_resources
 from autocorrect import Speller
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, ListFlowable, ListItem
+from reportlab.lib.styles import getSampleStyleSheet
 
 spell = Speller()
 tokenizer = RegexpTokenizer(r"\w+")
@@ -45,6 +51,10 @@ def main():
     input_ingredients = args.Available_Ingredients.split(",")
     corrected_ingredients = [spell(ingredient.strip().lower()) for ingredient in input_ingredients]
 
+    print("\nInputted Ingredients:")
+    for original, corrected in zip(input_ingredients, corrected_ingredients):
+        print(f"{original} (Auto-corrected to: {corrected})")
+
     recipe_data = load_recipe_data()
 
     if not recipe_data:
@@ -56,9 +66,13 @@ def main():
         print("No matching recipes found.")
         return
 
-    print("\nMatching recipes (Sorted by least additional ingredients, lower is better):")
+    print("\nMatching recipes:")
     for index, recipe in enumerate(matching_recipes, start=1):
         print(f"{index}. {recipe['recipe'].get('title', 'Title not available')} (Score: {recipe['score']})")
+
+    print("\nScoring System:")
+    print("The score is based on the number of additional ingredients required for each recipe.")
+    print("Lower score indicates a better match with your available ingredients.")
 
     root = tk.Tk()
     root.withdraw()
@@ -73,8 +87,53 @@ def main():
         print("\nDirections:")
         for step, direction in enumerate(selected_recipe.get("directions", []), start=1):
             print(f"{step}. {direction}")
+
+        create_pdf = messagebox.askyesno("Create PDF", "Do you want to create a PDF of this recipe so you can print it?")
+        if create_pdf:
+            create_recipe_pdf(selected_recipe)
+
     elif recipe_number is not None:
         print("\nInvalid recipe number.")
+
+def create_recipe_pdf(recipe):
+    try:
+        pdf_file = f"{recipe.get('title', 'Recipe')}.pdf"
+
+        if os.path.exists(pdf_file):
+            confirm_override = messagebox.askyesno("File Exists", f"'{pdf_file}' already exists. Do you want to override it?")
+            if not confirm_override:
+                return
+
+        doc = SimpleDocTemplate(pdf_file, pagesize=letter)
+        styles = getSampleStyleSheet()
+        story = []
+
+        title = recipe.get('title', 'Title not available')
+        title_text = Paragraph(f"<b>Recipe: {title}</b>", styles['Title'])
+        story.append(title_text)
+
+        story.append(Spacer(1, 12))
+
+        ingredients_text = "<b>Ingredients:</b><br/>" + "<br/>".join(recipe.get("ingredients", []))
+        ingredients = Paragraph(ingredients_text, styles['Normal'])
+        story.append(ingredients)
+
+        story.append(Spacer(1, 12))
+
+        directions_label = Paragraph("<b>Directions:</b>", styles['Normal'])
+        story.append(directions_label)
+
+        directions = recipe.get("directions", [])
+        for i, line in enumerate(directions, start=1):
+            direction_text = f"{i}. {line}"
+            direction = Paragraph(direction_text, styles['Normal'])
+            story.append(direction)
+
+        doc.build(story)
+        messagebox.showinfo("PDF Created", f"Recipe PDF '{pdf_file}' created successfully.")
+    except Exception as e:
+        print(f"Error creating PDF: {e}")
+        messagebox.showerror("PDF Error", "An error occurred while creating the PDF.")
 
 if __name__ == "__main__":
     main()
