@@ -1,5 +1,6 @@
 import os
-os.environ['PYTHONUTF8'] = 1
+os.environ["PYTHONUTF8"] = "1"
+
 from nltk.tokenize import RegexpTokenizer
 import tkinter as tk
 from tkinter import simpledialog, messagebox
