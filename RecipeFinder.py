@@ -1,9 +1,10 @@
+import os
+os.environ['PYTHONUTF8'] = 1
 from nltk.tokenize import RegexpTokenizer
 import tkinter as tk
 from tkinter import simpledialog, messagebox
 from gooey import Gooey, GooeyParser
 import ujson as json
-import os
 import pkg_resources
 from autocorrect import Speller
 from reportlab.lib.pagesizes import letter
