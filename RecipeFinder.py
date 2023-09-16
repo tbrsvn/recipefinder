@@ -47,16 +47,23 @@ def find_matching_recipes(recipe_data, available_ingredients):
 def main():
     parser = GooeyParser(description="Find recipes based on your available ingredients!")
 
-    parser.add_argument("Available_Ingredients", type=str, help="Comma-separated list of available ingredients.")
+    parser.add_argument("Available_Ingredients", type=str, help="Comma-separated list of available ingredients. Type /noac as an ingriedient if you do not want auto-correct.")
 
     args = parser.parse_args()
 
     input_ingredients = args.Available_Ingredients.split(",")
-    corrected_ingredients = [spell(ingredient.strip().lower()) for ingredient in input_ingredients]
 
-    print("\nInputted Ingredients:")
-    for original, corrected in zip(input_ingredients, corrected_ingredients):
-        print(f"{original} (Auto-corrected to: {corrected}).")
+    disable_autocorrect = any(ingredient.strip().lower() == "/noac" for ingredient in input_ingredients)
+
+    if disable_autocorrect:
+        input_ingredients = [ingredient.strip().lower() for ingredient in input_ingredients if ingredient.strip().lower() != "/noac"]
+
+    corrected_ingredients = [spell(ingredient.strip().lower()) if not disable_autocorrect else ingredient.strip().lower() for ingredient in input_ingredients]
+
+    if not disable_autocorrect:
+        print("\nInputted Ingredients:")
+        for original, corrected in zip(input_ingredients, corrected_ingredients):
+            print(f"{original} (Auto-corrected to: {corrected}).")
 
     recipe_data = load_recipe_data()
 
@@ -72,17 +79,17 @@ def main():
     print("\nMatching recipes:")
     for index, recipe in enumerate(matching_recipes, start=1):
         print(f"{index}. {recipe['recipe'].get('title', 'Title not available.')} (Score: {recipe['score']})", flush=True)
-        
+
     print("\nScoring System:")
     print("The score is based on the number of additional ingredients required for each recipe.")
     print("A lower score indicates a better match with your available ingredients.")
-    
+
     sys.stdout.flush()
 
     root = tk.Tk()
     root.withdraw()
     recipe_number = simpledialog.askinteger("Recipe Selection", "Enter the number of the recipe you want to view:")
-    
+
     if recipe_number is not None and 0 <= recipe_number - 1 < len(matching_recipes):
         selected_recipe = matching_recipes[recipe_number - 1]["recipe"]
         print(f"\nRecipe: {selected_recipe.get('title', 'Title not available.')}\n")
@@ -101,7 +108,7 @@ def main():
 
     elif recipe_number is not None:
         print("\nInvalid recipe number.")
-        
+
 def create_recipe_pdf(recipe):
     try:
         pdf_directory = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
