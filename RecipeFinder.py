@@ -7,6 +7,7 @@ from tkinter import simpledialog, messagebox
 from gooey import Gooey, GooeyParser
 import ujson as json
 import pkg_resources
+import sys
 from autocorrect import Speller
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
