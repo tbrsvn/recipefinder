@@ -70,11 +70,13 @@ def main():
 
     print("\nMatching recipes:")
     for index, recipe in enumerate(matching_recipes, start=1):
-        print(f"{index}. {recipe['recipe'].get('title', 'Title not available')} (Score: {recipe['score']})")
+        print(f"{index}. {recipe['recipe'].get('title', 'Title not available')} (Score: {recipe['score']})", flush=True)
 
     print("\nScoring System:")
     print("The score is based on the number of additional ingredients required for each recipe.")
     print("Lower score indicates a better match with your available ingredients.")
+    
+    sys.stdout.flush()
 
     root = tk.Tk()
     root.withdraw()
