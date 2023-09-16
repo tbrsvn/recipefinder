@@ -47,7 +47,7 @@ def find_matching_recipes(recipe_data, available_ingredients):
 def main():
     parser = GooeyParser(description="Find recipes based on your available ingredients!")
 
-    parser.add_argument("Available_Ingredients", type=str, help="Comma-separated list of available ingredients")
+    parser.add_argument("Available_Ingredients", type=str, help="Comma-separated list of available ingredients.")
 
     args = parser.parse_args()
 
@@ -56,7 +56,7 @@ def main():
 
     print("\nInputted Ingredients:")
     for original, corrected in zip(input_ingredients, corrected_ingredients):
-        print(f"{original} (Auto-corrected to: {corrected})")
+        print(f"{original} (Auto-corrected to: {corrected}).")
 
     recipe_data = load_recipe_data()
 
@@ -71,8 +71,8 @@ def main():
 
     print("\nMatching recipes:")
     for index, recipe in enumerate(matching_recipes, start=1):
-        print(f"{index}. {recipe['recipe'].get('title', 'Title not available')} (Score: {recipe['score']})", flush=True)
-
+        print(f"{index}. {recipe['recipe'].get('title', 'Title not available.')} (Score: {recipe['score']})", flush=True)
+        
     print("\nScoring System:")
     print("The score is based on the number of additional ingredients required for each recipe.")
     print("A lower score indicates a better match with your available ingredients.")
@@ -85,7 +85,7 @@ def main():
     
     if recipe_number is not None and 0 <= recipe_number - 1 < len(matching_recipes):
         selected_recipe = matching_recipes[recipe_number - 1]["recipe"]
-        print(f"\nRecipe: {selected_recipe.get('title', 'Title not available')}\n")
+        print(f"\nRecipe: {selected_recipe.get('title', 'Title not available.')}\n")
         print("Ingredients:")
         for ingredient in selected_recipe.get("ingredients", []):
             print(f"- {ingredient}")
