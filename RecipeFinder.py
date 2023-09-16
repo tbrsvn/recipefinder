@@ -75,7 +75,7 @@ def main():
 
     print("\nScoring System:")
     print("The score is based on the number of additional ingredients required for each recipe.")
-    print("Lower score indicates a better match with your available ingredients.")
+    print("A lower score indicates a better match with your available ingredients.")
     
     sys.stdout.flush()
 
