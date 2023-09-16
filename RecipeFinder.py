@@ -93,6 +93,8 @@ def main():
         for step, direction in enumerate(selected_recipe.get("directions", []), start=1):
             print(f"{step}. {direction}")
 
+        sys.stdout.flush()
+
         create_pdf = messagebox.askyesno("Create PDF", "Do you want to create a PDF of this recipe so you can print it?")
         if create_pdf:
             create_recipe_pdf(selected_recipe)
