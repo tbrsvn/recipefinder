@@ -14,11 +14,7 @@ The format for each recipe should go something like this:
                 "Yummy",
                 "Things"
             ],
-            "language": "en-US",
-            "source": "TheWebsite.com",
-            "title": "Recipe Name",
-            "url": "TheWebsite.com/bestrecipe"
-             
+            "title": "Recipe Name"
     },
     "Another Recipe": {
     ....json cont
